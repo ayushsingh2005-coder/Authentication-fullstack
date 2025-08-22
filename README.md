@@ -318,7 +318,7 @@ npm start
 
 ---
 
-👉 **GitHub Repo Link:** https://github.com/ayushsingh2005-coder/Mern-Authentication
+👉 **GitHub Repo Link:** [https://github.com/ayushsingh2005-coder/Mern-Authentication](https://github.com/ayushsingh2005-coder/Authentication-fullstack/tree/main)
 
 ---
 
