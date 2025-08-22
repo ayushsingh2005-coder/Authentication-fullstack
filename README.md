@@ -331,8 +331,7 @@ Contributions and suggestions are welcome! Feel free to fork, raise issues, or s
 ## 📧 Contact
 
 Developed by Ayush Singh  
-🌐 LinkedIn: Your LinkedIn Profile  
-💻 Portfolio (optional)
+🌐 LinkedIn: [Your LinkedIn Profile ](https://www.linkedin.com/in/ayush-singh-2a0158295/) 
 
 ---
 
