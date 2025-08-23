@@ -1,12 +1,13 @@
 import React from "react";
-import "react-toastify/dist/ReactToastify.css";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHexagonNodes } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { UserDataContext } from "../Context/UserContext";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast ,ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const Auth = () => {
   const { user, setUser } = React.useContext(UserDataContext);
@@ -300,6 +301,24 @@ const Auth = () => {
           </button>
         </p>
       </div>
+      <ToastContainer
+  position="top-right"
+  autoClose={4000}
+  hideProgressBar={false}
+  newestOnTop={true}
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  theme="dark"
+  className="!top-4 !right-4"
+  toastClassName={() =>
+    "relative flex p-4 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer bg-black border border-red-700 shadow-2xl"
+  }
+  bodyClassName={() => "flex text-sm font-medium text-white p-3"}
+  progressClassName="bg-blue-500"
+/>
     </div>
   );
 };
