@@ -5,6 +5,7 @@ import Auth from './Pages/Auth'
 import OtpVerification from './Pages/OtpVerification'
 import Dashboard from './Pages/Dashboard'
 import ForgotPassword from './Pages/ForgotPassword'
+import Main from './Pages/Dashboard'
 
 
 const App = () => {
@@ -16,6 +17,7 @@ const App = () => {
        <Route path='/verifyotp' element={<OtpVerification/>}/>
        <Route path='/dashboard' element={<Dashboard/>}/>
        <Route path='/resetpassword' element={<ForgotPassword/>}/>
+       
 
     </Routes>
     </>

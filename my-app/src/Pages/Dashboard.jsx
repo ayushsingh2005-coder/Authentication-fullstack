@@ -1,11 +1,13 @@
 import React from 'react'
+import Navbar from '../components/Navbar'
 
-const Dashboard = () => {
+const Main = () => {
   return (
-    <div className=''>
-      hi
+    <div className=' h-screen bg-gray-900'>
+      <Navbar/>
+      
     </div>
   )
 }
 
-export default Dashboard
+export default Main
