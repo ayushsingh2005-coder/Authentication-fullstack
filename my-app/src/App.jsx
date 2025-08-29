@@ -6,6 +6,7 @@ import OtpVerification from './Pages/OtpVerification'
 import Dashboard from './Pages/Dashboard'
 import ForgotPassword from './Pages/ForgotPassword'
 import Main from './Pages/Dashboard'
+import Create from './Pages/Create'
 
 
 const App = () => {
@@ -17,8 +18,8 @@ const App = () => {
        <Route path='/verifyotp' element={<OtpVerification/>}/>
        <Route path='/dashboard' element={<Dashboard/>}/>
        <Route path='/resetpassword' element={<ForgotPassword/>}/>
+       <Route path='/post/create' element={<Create/>}/>
        
-
     </Routes>
     </>
     
