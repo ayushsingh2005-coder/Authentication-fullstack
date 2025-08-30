@@ -23,13 +23,13 @@ const Footer = () => {
 
           {/* Social Icons */}
           <div className="flex gap-4 mt-4 text-xl">
-            <a href="https://github.com" target="_blank" rel="noreferrer">
+            <a href="https://github.com/pathwaycom/" target="_blank" rel="noreferrer">
               <FaGithub className="hover:text-white" />
             </a>
             <a href="https://twitter.com" target="_blank" rel="noreferrer">
               <FaTwitter className="hover:text-white" />
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer">
+            <a href="https://www.linkedin.com/company/hackwithindia/posts/?feedView=all" target="_blank" rel="noreferrer">
               <FaLinkedin className="hover:text-white" />
             </a>
             <a href="mailto:example@email.com">
@@ -42,7 +42,7 @@ const Footer = () => {
         <div>
           <h3 className="text-white font-semibold mb-4">Platform</h3>
           <ul className="space-y-2">
-            <li><Link to="/trending" className="hover:text-white">Trending</Link></li>
+            
             <li><Link to="/categories" className="hover:text-white">Categories</Link></li>
             <li><Link to="/write" className="hover:text-white">Write</Link></li>
             <li><Link to="/authors" className="hover:text-white">Authors</Link></li>
@@ -65,9 +65,6 @@ const Footer = () => {
       <div className="border-t border-gray-700 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center text-sm">
         <p>© 2025 Devnovate. All rights reserved. Built for VIBE HACK 2025.</p>
         <div className="mt-3 md:mt-0">
-          <button className="bg-white text-black px-3 py-1 rounded-md flex items-center gap-1">
-            <span className="font-bold">b</span> Made in Bolt
-          </button>
         </div>
       </div>
     </footer>
