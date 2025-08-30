@@ -11,6 +11,14 @@ import Profile from "./Pages/Profile";
 import { Toaster } from "react-hot-toast"; 
 import AdminAuth from "./Pages/admin/AdminAuth";
 import AdminDashboard from "./Pages/admin/AdminDashboard";
+import Categories from "./Pages/Footer/Categories";
+import Authors from "./Pages/Footer/Authors";
+import Write from "./Pages/Footer/Write";
+import HelpCenter from "./Pages/Footer/HelpCenter";
+import WritingGuidelines from "./Pages/Footer/WritingGuidelines";
+import PrivacyPolicy from "./Pages/Footer/PrivacyPolicy";
+import TermsOfService from "./Pages/Footer/TermsOfService";
+
 
 const App = () => {
   return (
@@ -38,6 +46,16 @@ const App = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/admin" element={<AdminAuth />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
+
+        {/* footer items routes */}
+        <Route path="/categories" element={<Categories/>} />
+        <Route path="/authors" element={<Authors/>} />
+        <Route path="/write" element={<Write/>} />
+        <Route path="/help" element={<HelpCenter/>} />
+        <Route path="/guidelines" element={<WritingGuidelines/>} />
+        <Route path="/privacy" element={<PrivacyPolicy/>} />
+        <Route path="/term" element={<TermsOfService/>} />
+        
       </Routes>
     </div>
   );

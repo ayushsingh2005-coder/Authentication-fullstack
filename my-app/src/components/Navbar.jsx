@@ -242,7 +242,7 @@ const Navbars = () => {
     // STEP 4: Close dropdown and navigate to login
     setProfileOpen(false);
     console.log("🏠 Redirecting to login page...");
-    navigate('/login');
+    navigate('/auth');
     
     // STEP 5: Show success message
     console.log("✅ Logout completed successfully!");
