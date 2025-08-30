@@ -8,6 +8,7 @@ import ForgotPassword from './Pages/ForgotPassword'
 import Main from './Pages/Dashboard'
 import Create from './Pages/Create'
 import Trending from './Pages/Trending'
+import Profile from './Pages/Profile'
 
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
        <Route path='/resetpassword' element={<ForgotPassword/>}/>
        <Route path='/post/create' element={<Create/>}/>
        <Route path='/post/trending' element={<Trending/>}/>
+       <Route path='/profile' element={<Profile/>}/>
        
     </Routes>
     </>
