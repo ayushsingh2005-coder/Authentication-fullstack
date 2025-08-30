@@ -47,7 +47,7 @@ export const getAllPosts = async (filters = {}) => {
     if (filters[key]) params.append(key, filters[key]);
   });
   
-  const response = await adminApi.get(`/posts?${params}`);
+  const response = await adminApi.get(`/posts?${params}`);                                      
   return response.data;
 };
 
