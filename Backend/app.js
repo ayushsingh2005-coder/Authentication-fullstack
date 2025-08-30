@@ -6,7 +6,7 @@ const cors = require('cors');
 const connectToDb = require('./db/db');
 const cookieParser = require('cookie-parser')
 const userRoutes = require('./routes/user.routes')
-
+const adminRoutes = require('./routes/admin.routes');
 
 connectToDb();
 
@@ -30,5 +30,7 @@ app.get('/' , (req,res)=>{
 })
 
 app.use('/users' , userRoutes);
+
+app.use('/api/admin', adminRoutes);
 
 module.exports = app;

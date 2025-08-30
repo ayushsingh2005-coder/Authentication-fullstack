@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 
 const Hero = () => {
@@ -52,37 +51,36 @@ const Hero = () => {
   // Load posts when component mounts
   useEffect(() => {
     loadPosts();
-    console.log(posts);
-    
+    loadTrendingPosts();
   }, []);
 
   // API call to fetch all posts
   const loadPosts = async () => {
     try {
       // TODO: Replace with actual API call using axios
-      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/post`);
-      setPosts(response.data);
+      // const response = await axios.get('http://localhost:3001/api/posts');
+      // setPosts(response.data);
       
       // For now, using sample data
-      // setPosts(samplePosts);
+      setPosts(samplePosts);
     } catch (error) {
       console.error('Error loading posts:', error);
     }
   };
 
   // API call to fetch trending posts for sidebar
-  // const loadTrendingPosts = async () => {
-  //   try {
-  //     // TODO: Replace with actual API call using axios
-  //     // const response = await axios.get('http://localhost:3001/api/posts/trending');
-  //     // setTrendingPosts(response.data);
+  const loadTrendingPosts = async () => {
+    try {
+      // TODO: Replace with actual API call using axios
+      // const response = await axios.get('http://localhost:3001/api/posts/trending');
+      // setTrendingPosts(response.data);
       
-  //     // For now, using sample data
-  //     setTrendingPosts(sampleTrending);
-  //   } catch (error) {
-  //     console.error('Error loading trending posts:', error);
-  //   }
-  // };
+      // For now, using sample data
+      setTrendingPosts(sampleTrending);
+    } catch (error) {
+      console.error('Error loading trending posts:', error);
+    }
+  };
 
   // Filter posts by category
   const filteredPosts = activeCategory === 'All' 
@@ -90,20 +88,20 @@ const Hero = () => {
     : posts.filter(post => post.category === activeCategory);
 
   // Handle category filter change
-  // const handleCategoryChange = async (category) => {
-  //   setActiveCategory(category);
+  const handleCategoryChange = async (category) => {
+    setActiveCategory(category);
     
-  //   // TODO: API call to fetch posts by category
-  //   // try {
-  //   //   const url = category === 'All' 
-  //   //     ? 'http://localhost:3001/api/posts' 
-  //   //     : `http://localhost:3001/api/posts?category=${category}`;
-  //   //   const response = await axios.get(url);
-  //   //   setPosts(response.data);
-  //   // } catch (error) {
-  //   //   console.error('Error filtering posts by category:', error);
-  //   // }
-  // };
+    // TODO: API call to fetch posts by category
+    // try {
+    //   const url = category === 'All' 
+    //     ? 'http://localhost:3001/api/posts' 
+    //     : `http://localhost:3001/api/posts?category=${category}`;
+    //   const response = await axios.get(url);
+    //   setPosts(response.data);
+    // } catch (error) {
+    //   console.error('Error filtering posts by category:', error);
+    // }
+  };
 
   // Handle tab change (Latest/Trending)
   const handleTabChange = async (tab) => {
