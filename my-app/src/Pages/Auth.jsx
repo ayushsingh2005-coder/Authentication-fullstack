@@ -92,7 +92,7 @@ const Auth = () => {
         loginData
       );
 
-      console.log("Login response:", response.data);
+      console.log("Login response:", response.data); 
 
       // ✅ Success handling
       if (response.status === 200 && response.data.success) {

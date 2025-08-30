@@ -1,5 +1,5 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const Hero = () => {
   const [posts, setPosts] = useState([]);
@@ -7,7 +7,6 @@ const Hero = () => {
   const [activeCategory, setActiveCategory] = useState('All');
   const [activeTab, setActiveTab] = useState('Latest');
 
-  const navigate = useNavigate();
   // Sample data - replace with API calls
   const samplePosts = [
     {
@@ -53,36 +52,37 @@ const Hero = () => {
   // Load posts when component mounts
   useEffect(() => {
     loadPosts();
-    loadTrendingPosts();
+    console.log(posts);
+    
   }, []);
 
   // API call to fetch all posts
   const loadPosts = async () => {
     try {
       // TODO: Replace with actual API call using axios
-      // const response = await axios.get('http://localhost:3001/api/posts');
-      // setPosts(response.data);
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/post`);
+      setPosts(response.data);
       
       // For now, using sample data
-      setPosts(samplePosts);
+      // setPosts(samplePosts);
     } catch (error) {
       console.error('Error loading posts:', error);
     }
   };
 
   // API call to fetch trending posts for sidebar
-  const loadTrendingPosts = async () => {
-    try {
-      // TODO: Replace with actual API call using axios
-      // const response = await axios.get('http://localhost:3001/api/posts/trending');
-      // setTrendingPosts(response.data);
+  // const loadTrendingPosts = async () => {
+  //   try {
+  //     // TODO: Replace with actual API call using axios
+  //     // const response = await axios.get('http://localhost:3001/api/posts/trending');
+  //     // setTrendingPosts(response.data);
       
-      // For now, using sample data
-      setTrendingPosts(sampleTrending);
-    } catch (error) {
-      console.error('Error loading trending posts:', error);
-    }
-  };
+  //     // For now, using sample data
+  //     setTrendingPosts(sampleTrending);
+  //   } catch (error) {
+  //     console.error('Error loading trending posts:', error);
+  //   }
+  // };
 
   // Filter posts by category
   const filteredPosts = activeCategory === 'All' 
@@ -90,20 +90,20 @@ const Hero = () => {
     : posts.filter(post => post.category === activeCategory);
 
   // Handle category filter change
-  const handleCategoryChange = async (category) => {
-    setActiveCategory(category);
+  // const handleCategoryChange = async (category) => {
+  //   setActiveCategory(category);
     
-    // TODO: API call to fetch posts by category
-    // try {
-    //   const url = category === 'All' 
-    //     ? 'http://localhost:3001/api/posts' 
-    //     : `http://localhost:3001/api/posts?category=${category}`;
-    //   const response = await axios.get(url);
-    //   setPosts(response.data);
-    // } catch (error) {
-    //   console.error('Error filtering posts by category:', error);
-    // }
-  };
+  //   // TODO: API call to fetch posts by category
+  //   // try {
+  //   //   const url = category === 'All' 
+  //   //     ? 'http://localhost:3001/api/posts' 
+  //   //     : `http://localhost:3001/api/posts?category=${category}`;
+  //   //   const response = await axios.get(url);
+  //   //   setPosts(response.data);
+  //   // } catch (error) {
+  //   //   console.error('Error filtering posts by category:', error);
+  //   // }
+  // };
 
   // Handle tab change (Latest/Trending)
   const handleTabChange = async (tab) => {
@@ -123,15 +123,16 @@ const Hero = () => {
 
   // Handle navigation to create post page
   const handleStartWriting = () => {
-    navigate('/post/create');
-    
+    // TODO: Replace with router navigation
+    // navigate('/post/create');
+    console.log('Navigate to create post page');
   };
 
   // Handle navigation to trending page
   const handleExploreTrending = () => {
     // TODO: Replace with router navigation  
-    navigate('/post/trending');
-    
+    // navigate('/trending');
+    console.log('Navigate to trending page');
   };
 
   return (
@@ -156,7 +157,7 @@ const Hero = () => {
           <div className="flex justify-center gap-4">
             <button 
               onClick={handleStartWriting}
-              className="bg-indigo-600 cursor-pointer hover:bg-indigo-500 px-6 py-3 rounded-lg font-semibold transition"
+              className="bg-indigo-600 hover:bg-indigo-500 px-6 py-3 rounded-lg font-semibold transition"
             >
               Start Writing
             </button>

@@ -269,7 +269,11 @@ const Navbars = () => {
 
   const handleCreatePostClick = () => {
     console.log("Navigating to create post page");
-    navigate('/create-post');
+    navigate('/post/create');
+  };
+  const handleStartWriting = () => {
+
+    
   };
 
   /**
