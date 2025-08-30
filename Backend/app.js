@@ -18,6 +18,13 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
 
+
+const postRoute = require("./routes/postRoutes");
+const adminRoute = require("./routes/adminPostRoute");
+
+app.use("/post" , postRoute);
+app.use("/admin", adminRoute )
+
 app.get('/' , (req,res)=>{
     res.send('hey new project ');
 })
