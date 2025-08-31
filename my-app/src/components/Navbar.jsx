@@ -272,7 +272,7 @@ const Navbars = () => {
     navigate('/post/create');
   };
   const handleStartWriting = () => {
-
+    navigate('/post/create');
     
   };
 

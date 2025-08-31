@@ -5,7 +5,7 @@ import Auth from "./Pages/Auth";
 import OtpVerification from "./Pages/OtpVerification";
 import Dashboard from "./Pages/Dashboard";
 import ForgotPassword from "./Pages/ForgotPassword";
-import Create from "./Pages/Create";
+import Create from "./Pages/Postdashboard";
 import Trending from "./Pages/Trending";
 import Profile from "./Pages/Profile";
 import { Toaster } from "react-hot-toast"; 
@@ -18,6 +18,7 @@ import HelpCenter from "./Pages/Footer/HelpCenter";
 import WritingGuidelines from "./Pages/Footer/WritingGuidelines";
 import PrivacyPolicy from "./Pages/Footer/PrivacyPolicy";
 import TermsOfService from "./Pages/Footer/TermsOfService";
+import CrudPost from "./Pages/post/CrudPost";
 
 
 const App = () => {
@@ -42,6 +43,7 @@ const App = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/resetpassword" element={<ForgotPassword />} />
         <Route path="/post/create" element={<Create />} />
+        <Route path="/crudpost" element={<CrudPost />} />
         <Route path="/post/trending" element={<Trending />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/admin" element={<AdminAuth />} />

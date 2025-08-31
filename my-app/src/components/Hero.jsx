@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Hero = () => {
   const [posts, setPosts] = useState([]);
   const [trendingPosts, setTrendingPosts] = useState([]);
   const [activeCategory, setActiveCategory] = useState('All');
   const [activeTab, setActiveTab] = useState('Latest');
+
+  const navigate = useNavigate();
 
   // Sample data - replace with API calls
   const samplePosts = [
@@ -120,11 +123,10 @@ const Hero = () => {
   };
 
   // Handle navigation to create post page
-  const handleStartWriting = () => {
-    // TODO: Replace with router navigation
-    // navigate('/post/create');
-    console.log('Navigate to create post page');
-  };
+const handleStartWriting = () => {
+  navigate("/post/create");
+  console.log("Navigate to create post page");
+};
 
   // Handle navigation to trending page
   const handleExploreTrending = () => {
@@ -152,7 +154,7 @@ const Hero = () => {
           </p>
           
           {/* Action buttons - keeping original functionality */}
-          <div className="flex justify-center gap-4">
+          <div className="flex cursor-pointer  justify-center gap-4">
             <button 
               onClick={handleStartWriting}
               className="bg-indigo-600 hover:bg-indigo-500 px-6 py-3 rounded-lg font-semibold transition"
