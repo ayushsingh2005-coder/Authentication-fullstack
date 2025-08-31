@@ -259,18 +259,14 @@ const Navbars = () => {
    */
   const handleHomeClick = () => {
     console.log("Navigating to home page");
-    navigate('/');
+    navigate('/dashboard');
   };
 
   const handleMyArticlesClick = () => {
     console.log("Navigating to my articles page");
-    navigate('/my-articles');
-  };
-
-  const handleCreatePostClick = () => {
-    console.log("Navigating to create post page");
     navigate('/post/create');
   };
+
   const handleStartWriting = () => {
     navigate('/post/create');
     
@@ -313,7 +309,7 @@ const Navbars = () => {
               onClick={handleHomeClick}
             >
               <LogoIcon />
-              <span className="text-2xl font-bold text-white">Devnovate</span>
+              <span className="text-2xl font-bold text-white">Omnia</span>
             </div>
           </div>
 
@@ -351,13 +347,6 @@ const Navbars = () => {
               My Articles
             </button>
             
-            {/* Create Post Button */}
-            <button 
-              onClick={handleCreatePostClick}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out"
-            >
-              Create Post
-            </button>
             
             {/* Theme Toggle Button */}
             <button 

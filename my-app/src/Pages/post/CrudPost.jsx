@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import Navbar from "../../components/Navbar";
 
 const CrudPost = () => {
   const navigate = useNavigate();
@@ -87,6 +88,9 @@ const CrudPost = () => {
   };
 
   return (
+<>
+    <Navbar/>
+
     <div className="min-h-screen bg-gray-900 text-white px-6 py-10">
       {/* Page Header */}
       <h1 className="text-3xl font-bold text-indigo-400 mb-6">
@@ -119,13 +123,15 @@ const CrudPost = () => {
         />
         <button
           type="submit"
-          className="bg-indigo-600 hover:bg-indigo-500 px-6 cursor-pointer py-2 rounded-lg font-semibold transition"
+          className="bg-indigo-800 hover:bg-indigo-600 px-6 cursor-pointer py-2 rounded-lg font-semibold transition"
         >
           Publish
         </button>
       </form>
     </div>
+    </>
   );
+  
 };
 
 export default CrudPost;

@@ -147,7 +147,7 @@ const handleStartWriting = () => {
         {/* Hero content */}
         <div className="max-w-4xl mx-auto py-20 text-center">
           <h1 className="text-5xl font-bold mb-6">
-            Welcome to <span className="text-indigo-400">Devnovate</span>
+            Welcome to <span className="text-indigo-400">Omnia</span>
           </h1>
           <p className="text-xl text-slate-400 mb-10">
             A platform where developers share knowledge, insights, and innovations.

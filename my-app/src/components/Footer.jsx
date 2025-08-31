@@ -14,7 +14,7 @@ const Footer = () => {
             <div className="bg-purple-600 p-2 rounded-lg">
               <span className="text-white text-xl">🪶</span>
             </div>
-            <h2 className="text-lg font-bold text-white">Devnovate</h2>
+            <h2 className="text-lg font-bold text-white">Omnia</h2>
           </div>
           <p className="mt-4 text-sm leading-relaxed">
             A modern blogging platform for developers to share knowledge, insights, 
@@ -32,7 +32,7 @@ const Footer = () => {
             <a href="https://www.linkedin.com/company/hackwithindia/posts/?feedView=all" target="_blank" rel="noreferrer">
               <FaLinkedin className="hover:text-white" />
             </a>
-            <a href="mailto:example@email.com">
+            <a href="mailto:omnia.pvt.ltd@gmail.com">
               <FaEnvelope className="hover:text-white" />
             </a>
           </div>
