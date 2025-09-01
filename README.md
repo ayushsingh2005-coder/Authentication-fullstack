@@ -331,8 +331,4 @@ Contributions and suggestions are welcome! Feel free to fork, raise issues, or s
 ## 📧 Contact
 
 Developed by Ayush Singh  
-🌐 LinkedIn: [Your LinkedIn Profile ](https://www.linkedin.com/in/ayush-singh-2a0158295/) 
-
----
-
-**Would you like a project flow diagram (Mermaid) added to your README? Let me know!**
+🌐 LinkedIn:(https://www.linkedin.com/in/ayush-singh-2a0158295/)
