@@ -297,13 +297,14 @@ EMAIL_PASS=your_email_password
 
 Run backend:
 ```sh
-npm start
+cd backend
+npx nodemon
 ```
 
 Run frontend (React):
 ```sh
-cd client
-npm start
+cd frontend
+npm run dev
 ```
 
 ---
