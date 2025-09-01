@@ -93,7 +93,7 @@ const CrudPost = () => {
 
     <div className="min-h-screen bg-gray-900 text-white px-6 py-10">
       {/* Page Header */}
-      <h1 className="text-3xl font-bold text-indigo-400 mb-6">
+      <h1 className="text-3xl font-bold text-purple-500 mb-6">
         Post Dashboard
       </h1>
 
@@ -109,7 +109,7 @@ const CrudPost = () => {
           placeholder="Enter post title"
           value={formData.title}
           onChange={handleChange}
-          className="w-full px-4 py-2 mb-4 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+          className="w-full px-4 py-2 mb-4 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-purple-600 outline-none"
           required
         />
         <textarea
@@ -118,12 +118,12 @@ const CrudPost = () => {
           value={formData.content}
           onChange={handleChange}
           rows={5}
-          className="w-full px-4 py-2 mb-4 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+          className="w-full px-4 py-2 mb-4 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-purple-600  outline-none"
           required
         />
         <button
           type="submit"
-          className="bg-indigo-800 hover:bg-indigo-600 px-6 cursor-pointer py-2 rounded-lg font-semibold transition"
+          className="bg-purple-500 hover:bg-purple-600 px-6 cursor-pointer py-2 rounded-lg font-semibold transition"
         >
           Publish
         </button>

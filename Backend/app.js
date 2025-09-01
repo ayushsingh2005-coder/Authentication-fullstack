@@ -29,6 +29,6 @@ app.get('/' , (req,res)=>{
 
 app.use('/users' , userRoutes);
 
-// app.use('/api/admin', adminRoutes);
+app.use('/api/admin', adminRoutes);
 
 module.exports = app;

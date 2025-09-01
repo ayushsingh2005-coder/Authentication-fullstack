@@ -15,7 +15,7 @@ const AdminDashboard = () => {
 
   // Check admin authentication on component mount
   useEffect(() => {
-    const adminToken = localStorage.getItem('adminToken');
+    const adminToken = localStorage.getItem('success');
     if (!adminToken) {
       navigate('/admin');
       return;

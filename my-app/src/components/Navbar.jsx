@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHexagonNodes } from "@fortawesome/free-solid-svg-icons";
 
 // SVG Icon for the logo
 const LogoIcon = () => (
@@ -77,13 +79,15 @@ const MobileMenuIcon = () => (
 
 const Navbars = () => {
   const navigate = useNavigate();
-  
+
   // State management
   const [isProfileOpen, setProfileOpen] = useState(false);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isProfileLoading, setProfileLoading] = useState(false);
   const [isLogoutLoading, setLogoutLoading] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
+  const [user, setUser] = useState(null);
+  const [profileLetter, setProfileLetter] = useState("?");
 
   // Ref for the profile dropdown to detect clicks outside
   const profileDropdownRef = useRef(null);
@@ -106,111 +110,80 @@ const Navbars = () => {
 
   // Helper function to get authorization headers
   const getAuthHeaders = () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     return {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     };
   };
 
   // Helper function to handle authentication errors
   const handleAuthError = (error) => {
     if (error.response?.status === 401) {
-      console.log('Unauthorized - token expired or invalid');
+      console.log("Unauthorized - token expired or invalid");
       // Clear invalid token
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
       // Redirect to login
-      navigate('/login');
+      navigate("/login");
       return true; // Indicates auth error was handled
     }
     return false; // Not an auth error
   };
 
-  /**
-   * PROFILE HANDLER
-   * Endpoint: GET /users/profile
-   * Purpose: Fetches current user's profile data
-   * Authentication: Requires Bearer token
-   * 
-   * Success Flow:
-   * 1. Make API call with Authorization header
-   * 2. Store profile data in state
-   * 3. Navigate to profile page
-   * 
-   * Error Handling:
-   * - 401: Token expired/invalid → Clear storage and redirect to login
-   * - Other errors: Log error and show user feedback
-   */
   const handleProfileClick = async (e) => {
     e.preventDefault();
     console.log("Profile button clicked - fetching profile data...");
-    
+
     setProfileLoading(true);
-    
+
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/users/profile`,
         {
-          headers: getAuthHeaders()
+          headers: getAuthHeaders(),
         }
       );
-      
-      console.log('✅ Profile data fetched successfully:', response.data);
-      
+
+      console.log("✅ Profile data fetched successfully:", response.data);
+
       // Store profile data for use in profile page
       setUserProfile(response.data.user);
-      
+
       // Navigate to profile page
-      navigate('/profile', { 
-        state: { userData: response.data.user } // Pass data to profile page
+      navigate("/profile", {
+        state: { userData: response.data.user }, // Pass data to profile page
       });
-      
+
       // Close the dropdown after successful action
       setProfileOpen(false);
-      
     } catch (error) {
-      console.error('❌ Error fetching profile:', error);
-      
+      console.error("❌ Error fetching profile:", error);
+
       // Handle authentication errors
       if (handleAuthError(error)) {
         return; // Auth error handled, exit function
       }
-      
+
       // Handle other errors
       if (error.response?.status === 404) {
-        console.log('Profile not found');
-        alert('Profile not found. Please contact support.');
+        console.log("Profile not found");
+        alert("Profile not found. Please contact support.");
       } else {
-        console.log('Error fetching profile data');
-        alert('Failed to load profile. Please try again.');
+        console.log("Error fetching profile data");
+        alert("Failed to load profile. Please try again.");
       }
     } finally {
       setProfileLoading(false);
     }
   };
 
-  /**
-   * LOGOUT HANDLER  
-   * Endpoint: POST /users/logout
-   * Purpose: Logs out user and invalidates token
-   * Authentication: Requires Bearer token
-   * 
-   * Success Flow:
-   * 1. Make POST request to logout endpoint
-   * 2. Clear all authentication data from localStorage
-   * 3. Navigate to login page
-   * 
-   * Error Handling:
-   * - Even if API fails, still clear local storage (client-side logout)
-   * - Always redirect to login page
-   */
   const handleLogoutClick = async (e) => {
     e.preventDefault();
     console.log("🚀 Logout button clicked - starting logout process...");
-    
+
     setLogoutLoading(true);
-    
+
     try {
       // STEP 1: Call logout API to invalidate token on server
       console.log("📡 Making logout API call...");
@@ -218,78 +191,62 @@ const Navbars = () => {
         `${import.meta.env.VITE_BASE_URL}/users/logout`,
         {}, // Empty body
         {
-          headers: getAuthHeaders()
+          headers: getAuthHeaders(),
         }
       );
-      
-      console.log('✅ Logout API call successful:', response.data);
-      
+
+      console.log("✅ Logout API call successful:", response.data);
     } catch (error) {
-      console.error('⚠️ Logout API call failed:', error);
+      console.error("⚠️ Logout API call failed:", error);
       // Continue with client-side logout even if API fails
       console.log("Continuing with client-side logout...");
     }
-    
+
     // STEP 2: Clear all authentication data from localStorage
     console.log("🗑️ Clearing authentication data from localStorage...");
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('refreshToken'); // If you use refresh tokens
-    
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("refreshToken"); // If you use refresh tokens
+
     // STEP 3: Clear any user state
     setUserProfile(null);
-    
+
     // STEP 4: Close dropdown and navigate to login
     setProfileOpen(false);
     console.log("🏠 Redirecting to login page...");
-    navigate('/auth');
-    
+    navigate("/auth");
+
     // STEP 5: Show success message
     console.log("✅ Logout completed successfully!");
-    
+
     // Set loading to false after a short delay to show the loading state
     setTimeout(() => {
       setLogoutLoading(false);
     }, 500);
   };
 
-  /**
-   * NAVIGATION HANDLERS
-   * Purpose: Handle navigation to different pages with proper routing
-   */
   const handleHomeClick = () => {
     console.log("Navigating to home page");
-    navigate('/dashboard');
+    navigate("/dashboard");
   };
 
   const handleMyArticlesClick = () => {
     console.log("Navigating to my articles page");
-    navigate('/post/create');
+    navigate("/post/create");
   };
 
   const handleStartWriting = () => {
-    navigate('/post/create');
-    
+    navigate("/post/create");
   };
 
-  /**
-   * THEME TOGGLE HANDLER
-   * Purpose: Toggle between dark and light theme
-   * TODO: Implement theme switching logic
-   */
   const handleThemeToggle = () => {
     console.log("Theme toggle clicked");
     // TODO: Implement theme switching
     // Example: setTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
-  /**
-   * SEARCH HANDLER
-   * Purpose: Handle search functionality
-   * TODO: Implement search logic
-   */
   const handleSearchSubmit = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       const searchQuery = e.target.value;
       console.log("Search query:", searchQuery);
       // TODO: Implement search functionality
@@ -297,18 +254,43 @@ const Navbars = () => {
     }
   };
 
+  // extracting the user data from local storage
+  useEffect(() => {
+    const storedData = localStorage.getItem("userData");
+    // console.log(storedData)
+    if (storedData) {
+      try {
+        const userData = JSON.parse(storedData);
+        setUser(userData);
+
+        // Extract first letter of firstname OR fallback to email
+        const letter =
+          userData?.fullname?.firstname?.trim().charAt(0).toUpperCase() ||
+          userData?.email?.trim().charAt(0).toUpperCase() ||
+          "?";
+
+        setProfileLetter(letter);
+      } catch (error) {
+        console.error("Error parsing userData:", error);
+      }
+    }
+  }, []);
+
   return (
     <nav className="bg-[#111827] text-white shadow-lg">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          
           {/* LEFT SECTION: Logo */}
           <div className="flex items-center">
-            <div 
+            <div
               className="flex-shrink-0 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
               onClick={handleHomeClick}
             >
-              <LogoIcon />
+              <FontAwesomeIcon
+                icon={faHexagonNodes}
+                size="2x"
+                className="mr-2 text-purple-600"
+              />
               <span className="text-2xl font-bold text-white">Omnia</span>
             </div>
           </div>
@@ -322,34 +304,34 @@ const Navbars = () => {
               <input
                 type="text"
                 placeholder="Search articles..."
-                onKeyPress={handleSearchSubmit}
-                className="search-input bg-[#1F2937] border border-gray-600 text-white placeholder-gray-400 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 p-2.5 transition duration-300 ease-in-out"
+                onSubmit={handleSearchSubmit}
+                className="search-input bg-[#1F2937] border-none text-white placeholder-gray-400 text-base rounded-lg 
+focus:ring-2 focus:ring-purple-500 focus:border-purple-500 block w-full pl-10 p-2.5 
+transition duration-300 ease-in-out focus:outline-none"
               />
             </div>
           </div>
 
           {/* RIGHT SECTION: Navigation Links and Profile */}
           <div className="hidden md:flex items-center space-x-6">
-            
             {/* Home Link */}
             <button
               onClick={handleHomeClick}
-              className="text-gray-300 hover:text-white transition duration-150 ease-in-out"
+              className="text-lg text-gray-300 hover:text-purple-500 transition duration-150 ease-in-out cursor-pointer"
             >
               Home
             </button>
-            
+
             {/* My Articles Link */}
             <button
               onClick={handleMyArticlesClick}
-              className="text-gray-300 hover:text-white transition duration-150 ease-in-out"
+              className="text-lg text-gray-300 hover:text-purple-500 transition duration-150 ease-in-out cursor-pointer"
             >
               My Articles
             </button>
-            
-            
+
             {/* Theme Toggle Button */}
-            <button 
+            <button
               onClick={handleThemeToggle}
               className="text-gray-300 hover:text-white transition duration-150 ease-in-out"
             >
@@ -360,34 +342,35 @@ const Navbars = () => {
             <div className="relative" ref={profileDropdownRef}>
               <button
                 onClick={() => setProfileOpen(!isProfileOpen)}
-                className="flex items-center justify-center h-10 w-10 bg-gray-600 hover:bg-gray-500 rounded-full text-white font-bold text-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white transition-colors"
+                className="flex cursor-pointer items-center justify-center h-10 w-10 bg-purple-700 hover:bg-purple-600 rounded-full text-white font-bold text-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white transition-colors"
               >
-                U
+                {profileLetter}
               </button>
-              
+
               {/* Dropdown Menu */}
               {isProfileOpen && (
                 <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-[#1F2937] ring-1 ring-black ring-opacity-5 z-50">
-                  
                   {/* PROFILE BUTTON */}
                   <button
                     onClick={handleProfileClick}
                     disabled={isProfileLoading}
-                    className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="flex cursor-pointer items-center w-full text-left px-4 py-2 rounded text-base text-white hover:bg-purple-500 transition-colors"
                   >
                     <span>
-                      {isProfileLoading ? '🔄 Loading Profile...' : '👤 Profile'}
+                      {isProfileLoading
+                        ? "🔄 Loading Profile..."
+                        : "👤 Profile"}
                     </span>
                   </button>
-                  
+
                   {/* LOGOUT BUTTON - PROPERLY CONNECTED */}
                   <button
                     onClick={handleLogoutClick}
                     disabled={isLogoutLoading}
-                    className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="flex cursor-pointer items-center w-full text-left px-4 py-2 rounded text-base text-white hover:bg-purple-500  transition-colors"
                   >
                     <span>
-                      {isLogoutLoading ? '🔄 Logging out...' : '🚪 Logout'}
+                      {isLogoutLoading ? "🔄 Logging out..." : "🚪 Logout"}
                     </span>
                   </button>
                 </div>
@@ -412,7 +395,6 @@ const Navbars = () => {
       {isMobileMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            
             {/* Mobile Navigation Links */}
             <button
               onClick={() => {
@@ -423,7 +405,7 @@ const Navbars = () => {
             >
               Home
             </button>
-            
+
             <button
               onClick={() => {
                 handleMyArticlesClick();
@@ -433,8 +415,8 @@ const Navbars = () => {
             >
               My Articles
             </button>
-            
-            <button 
+
+            <button
               onClick={() => {
                 handleCreatePostClick();
                 setMobileMenuOpen(false);
@@ -443,7 +425,7 @@ const Navbars = () => {
             >
               Create Post
             </button>
-            
+
             {/* Mobile Profile and Logout Options */}
             <div className="border-t border-gray-700 pt-2 mt-2">
               <button
@@ -454,9 +436,9 @@ const Navbars = () => {
                 disabled={isProfileLoading}
                 className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium w-full text-left disabled:opacity-50 transition-colors"
               >
-                {isProfileLoading ? '🔄 Loading Profile...' : '👤 Profile'}
+                {isProfileLoading ? "🔄 Loading Profile..." : "👤 Profile"}
               </button>
-              
+
               <button
                 onClick={() => {
                   handleLogoutClick();
@@ -465,11 +447,11 @@ const Navbars = () => {
                 disabled={isLogoutLoading}
                 className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium w-full text-left disabled:opacity-50 transition-colors"
               >
-                {isLogoutLoading ? '🔄 Logging out...' : '🚪 Logout'}
+                {isLogoutLoading ? "🔄 Logging out..." : "🚪 Logout"}
               </button>
             </div>
           </div>
-          
+
           {/* Mobile Search Bar */}
           <div className="px-2 pb-3">
             <div className="relative">
@@ -493,4 +475,3 @@ const Navbars = () => {
 export default function Navbar() {
   return <Navbars />;
 }
-
