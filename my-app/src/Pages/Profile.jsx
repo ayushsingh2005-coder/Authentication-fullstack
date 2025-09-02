@@ -1,59 +1,139 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { User, Mail, Edit3, Save, X } from "lucide-react";
-import { useEffect } from "react";
 import axios from "axios";
+
 export default function Profile() {
-   const [user, setUser] = useState(null);
-   const [ProfileLetter,setProfileLetter] = useState(null);
-   const [profile, setProfile] = useState({
-  name: "",
-  email: "",
-  about: "",
-});
-
-      // extracting the user data from local
-      //  storage
-   useEffect(() => {
-  const storedData = localStorage.getItem("userData");
-
-  if (storedData) {
-    try {
-      const userData = JSON.parse(storedData);
-
-      // Update profile with real user data
-      setProfile({
-        name: userData?.fullname?.firstname || "No Name",
-        email: userData?.email || "No Email",
-        about:
-          userData?.about ||
-          "Full-stack developer passionate about building scalable web applications.",
-      });
-    } catch (error) {
-      console.error("Error parsing userData:", error);
-    }
-  }
-}, []);
+  // State for storing user data from API
+  const [user, setUser] = useState(null);
   
+  // State for storing profile information displayed on the page
+  const [profile, setProfile] = useState({
+    name: "",
+    email: "",
+    about: "",
+  });
 
+  // State for controlling the edit modal visibility
+  const [isEditing, setIsEditing] = useState(false);
+  
+  // State for storing form data while editing
+  const [editForm, setEditForm] = useState({
+    name: "",
+    email: "",
+    about: "",
+  });
+
+  // State for managing loading status during API calls
+  const [loading, setLoading] = useState(false);
+  
+  // State for storing and displaying error messages
+  const [error, setError] = useState(null);
+
+  /**
+   * Effect hook to load user data from localStorage on component mount
+   * This runs once when the component is first rendered
+   */
   useEffect(() => {
-    try {
-      const res = axios.get(`${import.meta.env.VITE_BASE_URL}/users/profile`, {
-        withCredentials: true // Required for cross-origin requests
-      });
-      console.log(res);
-    } catch (error) {
-      console.error(error);
+    const storedData = localStorage.getItem("userData");
+
+    if (storedData) {
+      try {
+        const userData = JSON.parse(storedData);
+
+        // Create profile object from stored user data
+        const profileData = {
+          name: userData?.fullname?.firstname || "No Name",
+          email: userData?.email || "No Email",
+          about:
+            userData?.about ||
+            "Full-stack developer passionate about building scalable web applications.",
+        };
+
+        // Update both profile and edit form with the data
+        setProfile(profileData);
+        setEditForm(profileData);
+        setUser(userData);
+      } catch (error) {
+        console.error("Error parsing userData:", error);
+        setError("Error loading user data from storage");
+      }
     }
   }, []);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editForm, setEditForm] = useState(profile);
 
-  // Generate profile logo from email's first character
+  /**
+   * Effect hook to fetch profile data from the API
+   * This runs once when the component mounts and attempts to get fresh data from server
+   */
+  useEffect(() => {
+  const fetchProfile = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      let token = localStorage.getItem('token');
+      if (token) {
+        try {
+          token = JSON.parse(token); // in case it was stringified
+        } catch (err) {
+          // if it's not JSON, keep it as string
+        }
+      }
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/users/profile`,
+        {
+    withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+      );
+
+      if (response.status === 200 || response.status === 201) {
+        const apiProfileData = {
+          name: response.data.fullname?.firstname || response.data.name || profile.name,
+          email: response.data.email || profile.email,
+          about: response.data.about || profile.about,
+        };
+        setProfile(apiProfileData);
+        setEditForm(apiProfileData);
+        setUser(response.data);
+      }
+    } catch (error) {
+      console.error("API Error:", error);
+
+      if (error.response) {
+        const status = error.response.status;
+        if (status === 401) setError("Authentication required. Please log in again.");
+        else if (status === 403) setError("Access forbidden. You don't have permission to view this profile.");
+        else setError(`Server error: ${status}`);
+      } else if (error.request) {
+        setError("Network error. Please check your connection.");
+      } else {
+        setError("An unexpected error occurred.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  
+}, [import.meta.env.VITE_BASE_URL]);
+
+  /**
+   * Generate profile logo letter from email's first character
+   * @param {string} email - User's email address
+   * @returns {string} - Uppercase first letter of email or 'U' as fallback
+   */
   const getProfileLogo = (email) => {
     return email ? email.charAt(0).toUpperCase() : "U";
   };
 
-  // Generate a consistent color based on email
+  /**
+   * Generate a consistent background color based on email
+   * Uses a hash function to ensure same email always gets same color
+   * @param {string} email - User's email address
+   * @returns {string} - Tailwind CSS background color class
+   */
   const getProfileColor = (email) => {
     if (!email) return "bg-purple-600";
 
@@ -68,46 +148,106 @@ export default function Profile() {
       "bg-teal-600",
     ];
 
+    // Create hash from email string
     let hash = 0;
     for (let i = 0; i < email.length; i++) {
       hash = email.charCodeAt(i) + ((hash << 5) - hash);
     }
+    
+    // Return color based on hash modulo
     return colors[Math.abs(hash) % colors.length];
   };
 
-  const handleSave = () => {
-    setProfile(editForm);
-    setIsEditing(false);
+  /**
+   * Handle saving profile changes
+   * Updates profile state and closes the edit modal
+   * In a real app, this would also send data to the server
+   */
+  const handleSave = async () => {
+    try {
+      setLoading(true);
+      
+      // Optional: Save to API
+      // Uncomment and modify this section to save changes to your backend
+      /*
+      const response = await axios.put(
+        `${import.meta.env.VITE_BASE_URL}/users/profile`,
+        editForm,
+        { withCredentials: true }
+      );
+      */
+      
+      // Update profile with form data
+      setProfile(editForm);
+      setIsEditing(false);
+      
+      // Update localStorage with new data
+      const updatedUserData = { ...user, ...editForm };
+      localStorage.setItem("userData", JSON.stringify(updatedUserData));
+      setUser(updatedUserData);
+      
+      // Clear any existing errors
+      setError(null);
+      
+    } catch (error) {
+      console.error("Error saving profile:", error);
+      setError("Failed to save profile changes");
+    } finally {
+      setLoading(false);
+    }
   };
 
+  /**
+   * Handle canceling profile edit
+   * Resets form data to current profile values and closes modal
+   */
   const handleCancel = () => {
-    setEditForm(profile);
-    setIsEditing(false);
+    setEditForm(profile); // Reset form to current profile data
+    setIsEditing(false);  // Close modal
+    setError(null);       // Clear any errors
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
-      {/* Header */}
+      {/* Header Section - Welcome message and platform description */}
       <div className="bg-gray-900/50 backdrop-blur-sm border-b border-gray-700">
         <div className="max-w-4xl mx-auto px-6 py-4">
           <h1 className="text-2xl font-bold text-white">
             Welcome to <span className="text-purple-400">Omnia</span>
           </h1>
           <p className="text-gray-300 mt-1">
-            A platform where developers share knowledge, insights, and
-            innovations.
+            A platform where developers share knowledge, insights, and innovations.
           </p>
         </div>
       </div>
 
-      {/* Profile Content */}
+      {/* Error Display Section - Shows error messages if any */}
+      {error && (
+        <div className="max-w-4xl mx-auto px-6 py-4">
+          <div className="bg-red-600/20 border border-red-500/50 rounded-lg p-4">
+            <p className="text-red-300">{error}</p>
+          </div>
+        </div>
+      )}
+
+      {/* Loading Display Section - Shows loading state during API calls */}
+      {loading && (
+        <div className="max-w-4xl mx-auto px-6 py-4">
+          <div className="bg-blue-600/20 border border-blue-500/50 rounded-lg p-4">
+            <p className="text-blue-300">Loading profile data...</p>
+          </div>
+        </div>
+      )}
+
+      {/* Main Profile Content Section */}
       <div className="max-w-4xl mx-auto px-6 py-12">
         <div className="bg-gray-800/60 backdrop-blur-sm rounded-2xl border border-gray-700 overflow-hidden">
-          {/* Profile Header */}
+          
+          {/* Profile Header - Contains profile picture, name, email, and edit button */}
           <div className="bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-6">
-                {/* Profile Logo */}
+                {/* Profile Logo - Generated from email initial */}
                 <div
                   className={`w-20 h-20 rounded-full ${getProfileColor(
                     profile.email
@@ -116,6 +256,7 @@ export default function Profile() {
                   {getProfileLogo(profile.email)}
                 </div>
 
+                {/* Profile Info - Name and email */}
                 <div>
                   <h2 className="text-3xl font-bold text-white">
                     {profile.name}
@@ -127,10 +268,11 @@ export default function Profile() {
                 </div>
               </div>
 
-              {/* Edit Button */}
+              {/* Edit Profile Button */}
               <button
                 onClick={() => setIsEditing(true)}
-                className="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-all duration-200"
+                disabled={loading}
+                className="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Edit3 className="w-4 h-4" />
                 <span>Edit Profile</span>
@@ -138,10 +280,11 @@ export default function Profile() {
             </div>
           </div>
 
-          {/* Profile Content */}
+          {/* Profile Content - About section, stats, and posts */}
           <div className="p-8">
             <div className="space-y-6">
-              {/* About Section */}
+              
+              {/* About Section - User's description/bio */}
               <div>
                 <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
                   <User className="w-5 h-5 mr-2 text-purple-400" />
@@ -154,7 +297,7 @@ export default function Profile() {
                 </div>
               </div>
 
-              {/* Stats Section */}
+              {/* Stats Section - Articles and likes count */}
               <div className="grid grid-cols-2 gap-4 mt-8">
                 <div className="rounded-lg p-4 text-center border border-gray-600">
                   <div className="text-2xl font-bold text-purple-400">124</div>
@@ -167,8 +310,7 @@ export default function Profile() {
                 </div>
               </div>
 
-              {/* post summary  */}
-              {/* Posts Section */}
+              {/* Posts Section - Shows approved and pending posts */}
               <div className="mt-12">
                 <h3 className="text-xl font-semibold text-white mb-6 flex items-center">
                   <Edit3 className="w-5 h-5 mr-2 text-purple-400" />
@@ -176,7 +318,7 @@ export default function Profile() {
                 </h3>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {/* Approved Posts */}
+                  {/* Approved Posts Column */}
                   <div className="bg-gray-700/50 rounded-lg border border-gray-600 overflow-hidden">
                     <div className="bg-green-600/20 border-b border-green-500/30 px-4 py-3">
                       <h4 className="font-semibold text-green-400 flex items-center">
@@ -186,7 +328,7 @@ export default function Profile() {
                     </div>
 
                     <div className="p-4 space-y-4 max-h-96 overflow-y-auto">
-                      {/* Approved Post 1 */}
+                      {/* Sample Approved Posts */}
                       <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-600 hover:border-gray-500 transition-colors">
                         <h5 className="font-medium text-white mb-2">
                           Building Scalable Microservices with Node.js
@@ -203,7 +345,6 @@ export default function Profile() {
                         </div>
                       </div>
 
-                      {/* Approved Post 2 */}
                       <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-600 hover:border-gray-500 transition-colors">
                         <h5 className="font-medium text-white mb-2">
                           React Performance Optimization Tips
@@ -221,7 +362,6 @@ export default function Profile() {
                         </div>
                       </div>
 
-                      {/* Approved Post 3 */}
                       <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-600 hover:border-gray-500 transition-colors">
                         <h5 className="font-medium text-white mb-2">
                           Understanding JavaScript Closures
@@ -241,7 +381,7 @@ export default function Profile() {
                     </div>
                   </div>
 
-                  {/* Pending Posts */}
+                  {/* Pending Posts Column */}
                   <div className="bg-gray-700/50 rounded-lg border border-gray-600 overflow-hidden">
                     <div className="bg-yellow-600/20 border-b border-yellow-500/30 px-4 py-3">
                       <h4 className="font-semibold text-yellow-400 flex items-center">
@@ -251,7 +391,7 @@ export default function Profile() {
                     </div>
 
                     <div className="p-4 space-y-4 max-h-96 overflow-y-auto">
-                      {/* Pending Post 1 */}
+                      {/* Sample Pending Posts */}
                       <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-600 hover:border-gray-500 transition-colors">
                         <h5 className="font-medium text-white mb-2">
                           Advanced TypeScript Patterns
@@ -272,7 +412,6 @@ export default function Profile() {
                         </div>
                       </div>
 
-                      {/* Pending Post 2 */}
                       <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-600 hover:border-gray-500 transition-colors">
                         <h5 className="font-medium text-white mb-2">
                           Database Optimization Strategies
@@ -295,7 +434,7 @@ export default function Profile() {
                   </div>
                 </div>
 
-                {/* Posts Summary */}
+                {/* Posts Summary - Overview of all posts */}
                 <div className="mt-6 bg-gray-700/30 rounded-lg p-4 border border-gray-600">
                   <div className="grid grid-cols-3 gap-4 text-center">
                     <div>
@@ -318,10 +457,12 @@ export default function Profile() {
         </div>
       </div>
 
-      {/* Edit Modal */}
+      {/* Edit Profile Modal - Overlay modal for editing profile information */}
       {isEditing && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-gray-800 rounded-2xl border border-gray-700 w-full max-w-md">
+            
+            {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-700">
               <h3 className="text-xl font-semibold text-white">Edit Profile</h3>
               <button
@@ -332,8 +473,10 @@ export default function Profile() {
               </button>
             </div>
 
+            {/* Modal Form Fields */}
             <div className="p-6 space-y-6">
-              {/* Name Field */}
+              
+              {/* Full Name Input Field */}
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
                   Full Name
@@ -349,7 +492,7 @@ export default function Profile() {
                 />
               </div>
 
-              {/* Email Field */}
+              {/* Email Input Field */}
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
                   Email Address
@@ -365,7 +508,7 @@ export default function Profile() {
                 />
               </div>
 
-              {/* About Field */}
+              {/* About Textarea Field */}
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
                   About
@@ -381,7 +524,7 @@ export default function Profile() {
                 />
               </div>
 
-              {/* Preview Profile Logo */}
+              {/* Profile Logo Preview */}
               <div className="flex items-center space-x-3">
                 <div
                   className={`w-12 h-12 rounded-full ${getProfileColor(
@@ -396,20 +539,22 @@ export default function Profile() {
               </div>
             </div>
 
-            {/* Modal Actions */}
+            {/* Modal Action Buttons */}
             <div className="flex space-x-3 p-6 border-t border-gray-700">
               <button
                 onClick={handleCancel}
-                className="flex-1 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors"
+                disabled={loading}
+                className="flex-1 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
-                className="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 transition-colors"
+                disabled={loading}
+                className="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Save className="w-4 h-4" />
-                <span>Save Changes</span>
+                <span>{loading ? 'Saving...' : 'Save Changes'}</span>
               </button>
             </div>
           </div>
