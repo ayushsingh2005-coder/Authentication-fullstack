@@ -58,4 +58,19 @@ if (adminPostController.bulkUpdatePosts) {
   console.error("❌ No bulkUpdatePosts function found in controllers!");
 }
 
+// ALL NEW ROUTES FOR ADMIN 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports = router;
