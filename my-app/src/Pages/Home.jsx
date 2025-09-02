@@ -14,7 +14,7 @@ import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 
 const Home = () => {
   return (
-    <div className="flex flex-col md:flex-row h-screen w-full bg-gradient-to-br from-purple-500 via-slate-900 to-black">
+    <div className="flex flex-col md:flex-row h-screen w-full bg-gradient-to-br  from-purple-600 via-slate-900 to-black">
       {/* Left Section */}
       <div className="w-full md:w-1/2 flex flex-col justify-center px-8 md:px-12 text-white">
         <h2 className="text-lg font-semibold mb-6">"Welcome back! Got an idea worth sharing? Let’s put it into words." </h2>

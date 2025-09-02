@@ -93,7 +93,7 @@ const CrudPost = () => {
 
     <div className="min-h-screen bg-gray-900 text-white px-6 py-10">
       {/* Page Header */}
-      <h1 className="text-3xl font-bold text-purple-500 mb-6">
+      <h1 className="text-3xl font-bold text-purple-600 mb-6">
         Post Dashboard
       </h1>
 
@@ -123,7 +123,7 @@ const CrudPost = () => {
         />
         <button
           type="submit"
-          className="bg-purple-500 hover:bg-purple-600 px-6 cursor-pointer py-2 rounded-lg font-semibold transition"
+          className="bg-purple-700 hover:bg-purple-600 px-6 cursor-pointer py-2 rounded-lg font-semibold transition"
         >
           Publish
         </button>

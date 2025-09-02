@@ -168,7 +168,7 @@ const Dashboard = () => {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-700 to-purple-600 bg-clip-text text-transparent">
               Dashboard
             </h1>
             <p className="text-slate-400 text-lg mt-2">Welcome back, {userData?.fullname.firstname || 'User'}</p>

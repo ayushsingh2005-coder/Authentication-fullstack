@@ -147,7 +147,7 @@ const handleStartWriting = () => {
         {/* Hero content */}
         <div className="max-w-4xl mx-auto py-20 text-center">
           <h1 className="text-5xl font-bold mb-6">
-            Welcome to <span className="text-indigo-400">Omnia</span>
+            Welcome to <span className="text-purple-600">Omnia</span>
           </h1>
           <p className="text-xl text-slate-400 mb-10">
             A platform where developers share knowledge, insights, and innovations.
@@ -157,13 +157,13 @@ const handleStartWriting = () => {
           <div className="flex cursor-pointer  justify-center gap-4">
             <button 
               onClick={handleStartWriting}
-              className="bg-indigo-600 hover:bg-indigo-500 px-6 py-3 rounded-lg font-semibold transition"
+              className="bg-gradient-to-r from-indigo-600 to-purple-600  px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25 cursor-pointer"
             >
               Start Writing
             </button>
             <button 
               onClick={handleExploreTrending}
-              className="bg-slate-800 hover:bg-slate-700 px-6 py-3 rounded-lg font-semibold border border-slate-700 transition"
+              className="bg-gradient-to-r from-indigo-600 to-purple-600  px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25 cursor-pointer"
             >
               Explore Trending
             </button>
