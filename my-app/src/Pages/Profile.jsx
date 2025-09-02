@@ -3,12 +3,37 @@ import { User, Mail, Edit3, Save, X } from "lucide-react";
 import { useEffect } from "react";
 import axios from "axios";
 export default function Profile() {
-  const [profile, setProfile] = useState({
-    name: "Ayush",
-    email: "ayush@devnovate.com",
-    about:
-      "Full-stack developer passionate about building scalable web applications. Currently working on microservices architecture and exploring modern JavaScript frameworks.",
-  });
+   const [user, setUser] = useState(null);
+   const [ProfileLetter,setProfileLetter] = useState(null);
+   const [profile, setProfile] = useState({
+  name: "",
+  email: "",
+  about: "",
+});
+
+      // extracting the user data from local
+      //  storage
+   useEffect(() => {
+  const storedData = localStorage.getItem("userData");
+
+  if (storedData) {
+    try {
+      const userData = JSON.parse(storedData);
+
+      // Update profile with real user data
+      setProfile({
+        name: userData?.fullname?.firstname || "No Name",
+        email: userData?.email || "No Email",
+        about:
+          userData?.about ||
+          "Full-stack developer passionate about building scalable web applications.",
+      });
+    } catch (error) {
+      console.error("Error parsing userData:", error);
+    }
+  }
+}, []);
+  
 
   useEffect(() => {
     try {
@@ -66,7 +91,7 @@ export default function Profile() {
       <div className="bg-gray-900/50 backdrop-blur-sm border-b border-gray-700">
         <div className="max-w-4xl mx-auto px-6 py-4">
           <h1 className="text-2xl font-bold text-white">
-            Welcome to <span className="text-purple-400">Devnovate</span>
+            Welcome to <span className="text-purple-400">Omnia</span>
           </h1>
           <p className="text-gray-300 mt-1">
             A platform where developers share knowledge, insights, and
