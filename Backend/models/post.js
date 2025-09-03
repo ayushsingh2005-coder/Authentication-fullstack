@@ -14,9 +14,9 @@ const postSchema = new mongoose.Schema({
     maxlength: 300,
   },
   user: {
-    // type: mongoose.Schema.Types.ObjectId,
-    // ref: 'User',
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    // type: String,
     required: true,
   },
   likes: [
@@ -36,6 +36,16 @@ const postSchema = new mongoose.Schema({
     enum: ["pending", "approved", "rejected", "deleted"],
     default: "pending",
   },
+  hide :{
+    type : Boolean,
+    default : false,
+  },
+  reason : {
+    type : String,
+    trim : true,
+    default : "",
+  },
+  
   createdAt: {
     type: Date,
     default: Date.now,
@@ -57,7 +67,9 @@ const postSchema = new mongoose.Schema({
       type: String,
     },
   ],
-});
+},
+  {timestamps : true }
+);
 
 // Auto-update `updatedAt` on save
 postSchema.pre("save", function (next) {
