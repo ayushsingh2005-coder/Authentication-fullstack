@@ -4,7 +4,7 @@ const HelpCenter = () => {
   return (
     <div className="min-h-screen bg-[#0f172a] text-white px-6 md:px-16 py-12">
       <h1 className="text-4xl font-bold mb-6">
-        Help <span className="text-purple-400">Center</span>
+        Help <span className="text-purple-600">Center</span>
       </h1>
       <p className="text-gray-400 mb-8">
         Need assistance? Browse our FAQs or reach out to support.

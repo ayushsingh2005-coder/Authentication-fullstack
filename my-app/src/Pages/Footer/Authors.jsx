@@ -4,7 +4,7 @@ const Authors = () => {
   return (
     <div className="min-h-screen bg-[#0f172a] text-white px-6 md:px-16 py-12">
       <h1 className="text-4xl font-bold mb-6">
-        Meet Our <span className="text-purple-400">Authors</span>
+        Meet Our <span className="text-purple-600">Authors</span>
       </h1>
       <p className="text-gray-400 max-w-2xl mb-8">
         Discover the amazing developers, engineers, and creators who share their knowledge here.

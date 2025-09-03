@@ -3,9 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BarChart3, Users, FileText, Settings, LogOut } from 'lucide-react';
 import { getAdminStats, adminLogout } from '../../utils/adminApi';
-// import PostManagement from './PostManagement';
-// import UserManagement from './UserManagement';
-// import Analytics from './Analytics';
+
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');

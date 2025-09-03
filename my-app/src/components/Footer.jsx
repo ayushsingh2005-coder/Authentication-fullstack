@@ -101,8 +101,8 @@ const Footer = () => {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-gray-700 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center text-sm">
-        <p>© 2025 Devnovate. All rights reserved. Built for VIBE HACK 2025.</p>
+      <div className="border-t border-purple-600 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center text-sm">
+        <p className="text-gray-400">© 2025 Omnia. All rights reserved..</p>
         <div className="mt-3 md:mt-0"></div>
       </div>
     </footer>
