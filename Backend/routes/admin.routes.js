@@ -59,6 +59,8 @@ if (adminPostController.bulkUpdatePosts) {
 }
 
 // ALL NEW ROUTES FOR ADMIN 
+router.get('/posts/pending',  adminController.getPendingPosts);
+
 
 
 

@@ -162,3 +162,21 @@ function getStartDate(timeframe) {
   }
 }
 
+
+// all new admin controller function 
+// Get all Pending  post 
+
+module.exports.getPendingPosts = async(req,res,next)=>{
+  try {
+    const posts = await Post.find({status : "pending"})
+    .populate("user" , "fullname email")
+    .sort({createdAt : -1});
+
+    res.status(200).json(posts);
+    
+  } catch (error) {
+    res.status(500).json({message : "Server error" , error})
+  }
+};
+
+
